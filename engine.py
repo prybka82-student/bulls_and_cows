@@ -28,9 +28,20 @@ class Engine:
 
     def new_game(self, tries: int = 10) -> None:
         word_to_guess = self.dictionary.get_word().upper()
+        word_count = len(word_to_guess)
 
-        for try_ in range(tries):
+        print(f"The word has {len(word_to_guess)} letters.")
+
+        for try_ in range(1, tries+1):
             guess = input(f"Try {try_}: ").upper()
+
+            if len(guess) < word_count:
+                print(f">{guess}< is too short-it should have {word_count} letters")
+                continue
+
+            if len(guess) > word_count:
+                print(f">{guess}< is too long-it should have {word_count} letters")
+                continue
 
             if not Validator.is_isogram(guess):
                 print(f"{guess} is not an isogram!")
@@ -39,7 +50,7 @@ class Engine:
             res = Engine.check_guess(word_to_guess, guess)
 
             if res.bulls == len(word_to_guess):
-                print(f"Congratulations! You guessed the word {word_to_guess}")
+                print(f"Congratulations! You guessed the word {word_to_guess} in {try_} tries")
                 return
 
             print(f"Cows: {res.cows} | Bulls: {res.bulls}")
